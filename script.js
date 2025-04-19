@@ -5,14 +5,21 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function checkConnection() {
-  const { data, error } = await supabase.from("lobbies").select("*").limit(1);
-  const statusEl = document.getElementById("status");
+  try {
+    const { data, error } = await supabase.from("lobbies").select("*").limit(1);
+    const statusEl = document.getElementById("status");
 
-  if (error) {
-    statusEl.textContent = "❌ Connection failed!";
-    console.error(error);
-  } else {
-    statusEl.textContent = "✅ Connected to Supabase!";
+    console.log("Data:", data);
+    console.log("Error:", error);
+
+    if (error) {
+      statusEl.textContent = "❌ Connection failed!";
+    } else {
+      statusEl.textContent = "✅ Connected to Supabase!";
+    }
+  } catch (e) {
+    console.error("Exception:", e);
+    document.getElementById("status").textContent = "❌ Connection failed!";
   }
 }
 
